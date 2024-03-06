@@ -12,6 +12,12 @@ app.get('/blog',(req,res) => {
     res.send('Hello Block my name is lisset')
 })
 
+app.post('/product',(req,res)=>{
+    console.log(req.body);
+    res.send(req.body)
+})
+
+
 mongoose.set('strictQuery',false)
 mongoose.
 connect('mongodb+srv://Admin:ZDPXetouUHOB6IeQ@test1.e4czoye.mongodb.net/Node-API?retryWrites=true&w=majority&appName=Test1')
