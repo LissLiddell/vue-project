@@ -5,6 +5,8 @@ const app = express()
 
 
 app.use(express.json())
+// if you dont want instead by json
+app.use(express.urlencoded({extended: false}))
 
 //routes
 
@@ -16,10 +18,27 @@ app.get('/blog',(req,res) => {
     res.send('Hello Block my name is lisset')
 })
 
+// select
 app.get('/products',async(req,res)=>{
     try {
         const products = await Product.find({});
         res.status(200).json(products);
+    } catch (error) {
+        res.status(500).json({message: error.message})
+    }
+})
+
+//update o patch
+app.put('/product/:id', async(req,res)=>{
+    try {
+       const{id} = req.params; 
+       const product = await Product.findByIdAndUpdate(id,req.body)
+       // cannot find any product in database
+       if(!product){
+        return res.status(404).json({message: `cannot find any product with ID ${id}`})
+       }
+       const updatedProduct = await Product.findById(id);
+       res.status(200).json(updatedProduct); 
     } catch (error) {
         res.status(500).json({message: error.message})
     }
@@ -35,6 +54,7 @@ app.get('/product/:id', async(req,res) =>{
     }
 })
 
+//insert
 app.post('/product',async(req,res)=>{
  try {
     const product = await Product.create(req.body)
